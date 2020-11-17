@@ -27,322 +27,127 @@ def clear():
 #1| A1 B1 C1 D1 E1 F1 G1 H1
 #  ________________________
 #  A  B  C  D  E  F  G  H
+message=''
+a="1"
+b="2"
+c="3"
+d="4"
+e="5"
+f="6"
+g="7"
+h="8"
+array_abc=["a","b","c","d","e","f","g","h"]
+array_123=["1","2","3","4","5","6","7","8"]
+adjacent_squares=[]
+adjacent_squares_open=[]
+a8="R";b8="O";c8="R";d8="O";e8="R";f8="O";g8="R";h8="O"
+a7="O";b7="R";c7="O";d7="R";e7="O";f7="R";g7="O";h7="R"
+a6="R";b6="O";c6="R";d6="O";e6="R";f6="O";g6="R";h6="O"
+a5="B";b5="R";c5="B";d5="R";e5="B";f5="R";g5="B";h5="R"
+a4="R";b4="B";c4="R";d4="B";e4="R";f4="B";g4="R";h4="B"
+a3="X";b3="R";c3="X";d3="R";e3="X";f3="R";g3="X";h3="R"
+a2="R";b2="X";c2="R";d2="X";e2="R";f2="X";g2="R";h2="X"
+a1="X";b1="R";c1="X";d1="R";e1="X";f1="R";g1="X";h1="R"
 
-b8_occupation=1
-d8_occupation=1
-f8_occupation=1
-h8_occupation=1
-a7_occupation=1
-c7_occupation=1
-e7_occupation=1
-g7_occupation=1
-b6_occupation=1
-d6_occupation=1
-f6_occupation=1
-h6_occupation=1
-a5_occupation=1
-c5_occupation=1
-e5_occupation=1
-g5_occupation=1
-b4_occupation=1
-d4_occupation=1
-f4_occupation=1
-h4_occupation=1
-a3_occupation=1
-c3_occupation=1
-e3_occupation=1
-g3_occupation=1
-b2_occupation=1
-d2_occupation=1
-f2_occupation=1
-h2_occupation=1
-a1_occupation=1
-c1_occupation=1
-e1_occupation=1
-g1_occupation=1
+board=["a8","b8","c8","d8","e8","f8","g8","h8","a7","b7","c7","d7","e7","f7","g7","h7","a6","b6","c6","d6","e6","f6","g6","h6","a5","b5","c5","d5","e5","f5","g5","h5","a4","b4","c4","d4","e4","f4","g4","h4","a3","b3","c3","d3","e3","f3","g3","h3","a2","b2","c2","d2","e2","f2","g2","h2","a1","b1","c1","d1","e1","f1","g1","h1"]
 
-#white_box="   ",None,"on_white"
-#black_box="   ","white",None
-#red_box  ="   ",None,"on_red"
 def print_board():
-  global b8_occupation
-  global d8_occupation
-  global f8_occupation
-  global h8_occupation
-  global a7_occupation
-  global c7_occupation
-  global e7_occupation
-  global g7_occupation
-  global b6_occupation
-  global d6_occupation
-  global f6_occupation
-  global h6_occupation
-  global a5_occupation
-  global c5_occupation
-  global e5_occupation
-  global g5_occupation
-  global b4_occupation
-  global d4_occupation
-  global f4_occupation
-  global h4_occupation
-  global a3_occupation
-  global c3_occupation
-  global e3_occupation
-  global g3_occupation
-  global b2_occupation
-  global d2_occupation
-  global f2_occupation
-  global h2_occupation
-  global a1_occupation
-  global c1_occupation
-  global e1_occupation
-  global g1_occupation
-  for i in range(0,9):
-    cprint("   ",None,"on_white",end='')
-    if i==8:
-      cprint("   ",None,"on_white")
-      cprint("   ",None,"on_white",end='')
-  cprint("   ",None,"on_red",end='')
-  if b8_occupation==None:
-    cprint("   ","white",None,end='')
-  elif b8_occupation==1:
-    cprint(" X ","white",None,end='')
-  elif b8_occupation==2:
-    cprint(" O ","white",None,end='')
-  cprint("   ",None,"on_red",end='')
-  if d8_occupation==None:
-    cprint("   ","white",None,end='')
-  elif d8_occupation==1:
-    cprint(" X ","white",None,end='')
-  elif d8_occupation==2:
-    cprint(" O ","white",None,end='')
-  cprint("   ",None,"on_red",end='')
-  if f8_occupation==None:
-    cprint("   ","white",None,end='')
-  elif f8_occupation==1:
-    cprint(" X ","white",None,end='')
-  elif f8_occupation==2:
-    cprint(" O ","white",None,end='')
-  cprint("   ",None,"on_red",end='')
-  if h8_occupation==None:
-    cprint("   ","white",None,end='')
-  elif h8_occupation==1:
-    cprint(" X ","white",None,end='')
-  elif h8_occupation==2:
-    cprint(" O ","white",None,end='')
-  cprint("   ",None,"on_white")
-  cprint("   ",None,"on_white",end='')
-  if a7_occupation==None:
-    cprint("   ","white",None,end='')
-  elif a7_occupation==1:
-    cprint(" X ","white",None,end='')
-  elif a7_occupation==2:
-    cprint(" O ","white",None,end='')
-  cprint("   ",None,"on_red",end='')
-  if c7_occupation==None:
-    cprint("   ","white",None,end='')
-  elif c7_occupation==1:
-    cprint(" X ","white",None,end='')
-  elif c7_occupation==2:
-    cprint(" O ","white",None,end='')
-  cprint("   ",None,"on_red",end='')
-  if e7_occupation==None:
-    cprint("   ","white",None,end='')
-  elif e7_occupation==1:
-    cprint(" X ","white",None,end='')
-  elif e7_occupation==2:
-    cprint(" O ","white",None,end='')
-  cprint("   ",None,"on_red",end='')
-  if g7_occupation==None:
-    cprint("   ","white",None,end='')
-  elif g7_occupation==1:
-    cprint(" X ","white",None,end='')
-  elif g7_occupation==2:
-    cprint(" O ","white",None,end='')
-  cprint("   ",None,"on_red",end='')
-  cprint("   ",None,"on_white")
-  cprint("   ",None,"on_white",end='')
-  cprint("   ",None,"on_red",end='')
-  if b6_occupation==None:
-    cprint("   ","white",None,end='')
-  elif b6_occupation==1:
-    cprint(" X ","white",None,end='')
-  elif b6_occupation==2:
-    cprint(" O ","white",None,end='')
-  cprint("   ",None,"on_red",end='')
-  if d6_occupation==None:
-    cprint("   ","white",None,end='')
-  elif d6_occupation==1:
-    cprint(" X ","white",None,end='')
-  elif d6_occupation==2:
-    cprint(" O ","white",None,end='')
-  cprint("   ",None,"on_red",end='')
-  if f6_occupation==None:
-    cprint("   ","white",None,end='')
-  elif f6_occupation==1:
-    cprint(" X ","white",None,end='')
-  elif f6_occupation==2:
-    cprint(" O ","white",None,end='')
-  cprint("   ",None,"on_red",end='')
-  if h6_occupation==None:
-    cprint("   ","white",None,end='')
-  elif h6_occupation==1:
-    cprint(" X ","white",None,end='')
-  elif h6_occupation==2:
-    cprint(" O ","white",None,end='')
-  cprint("   ",None,"on_white")
-  cprint("   ",None,"on_white",end='')
-  if a5_occupation==None:
-    cprint("   ","white",None,end='')
-  elif a5_occupation==1:
-    cprint(" X ","white",None,end='')
-  elif a5_occupation==2:
-    cprint(" O ","white",None,end='')
-  cprint("   ",None,"on_red",end='')
-  if c5_occupation==None:
-    cprint("   ","white",None,end='')
-  elif c5_occupation==1:
-    cprint(" X ","white",None,end='')
-  elif c5_occupation==2:
-    cprint(" O ","white",None,end='')
-  cprint("   ",None,"on_red",end='')
-  if e5_occupation==None:
-    cprint("   ","white",None,end='')
-  elif e5_occupation==1:
-    cprint(" X ","white",None,end='')
-  elif e5_occupation==2:
-    cprint(" O ","white",None,end='')
-  cprint("   ",None,"on_red",end='')
-  if g5_occupation==None:
-    cprint("   ","white",None,end='')
-  elif g5_occupation==1:
-    cprint(" X ","white",None,end='')
-  elif g5_occupation==2:
-    cprint(" O ","white",None,end='')
-  cprint("   ",None,"on_red",end='')
-  cprint("   ",None,"on_white")
-  cprint("   ",None,"on_white",end='')
-  cprint("   ",None,"on_red",end='')
-  if b4_occupation==None:
-    cprint("   ","white",None,end='')
-  elif b4_occupation==1:
-    cprint(" X ","white",None,end='')
-  elif b4_occupation==2:
-    cprint(" O ","white",None,end='')
-  cprint("   ",None,"on_red",end='')
-  if d4_occupation==None:
-    cprint("   ","white",None,end='')
-  elif d4_occupation==1:
-    cprint(" X ","white",None,end='')
-  elif d4_occupation==2:
-    cprint(" O ","white",None,end='')
-  cprint("   ",None,"on_red",end='')
-  if f4_occupation==None:
-    cprint("   ","white",None,end='')
-  elif f4_occupation==1:
-    cprint(" X ","white",None,end='')
-  elif f4_occupation==2:
-    cprint(" O ","white",None,end='')
-  cprint("   ",None,"on_red",end='')
-  if h4_occupation==None:
-    cprint("   ","white",None,end='')
-  elif h4_occupation==1:
-    cprint(" X ","white",None,end='')
-  elif h4_occupation==2:
-    cprint(" O ","white",None,end='')
-  cprint("   ",None,"on_white")
-  cprint("   ",None,"on_white",end='')
-  if a3_occupation==None:
-    cprint("   ","white",None,end='')
-  elif a3_occupation==1:
-    cprint(" X ","white",None,end='')
-  elif a3_occupation==2:
-    cprint(" O ","white",None,end='')
-  cprint("   ",None,"on_red",end='')
-  if c3_occupation==None:
-    cprint("   ","white",None,end='')
-  elif c3_occupation==1:
-    cprint(" X ","white",None,end='')
-  elif c3_occupation==2:
-    cprint(" O ","white",None,end='')
-  cprint("   ",None,"on_red",end='')
-  if e3_occupation==None:
-    cprint("   ","white",None,end='')
-  elif e3_occupation==1:
-    cprint(" X ","white",None,end='')
-  elif e3_occupation==2:
-    cprint(" O ","white",None,end='')
-  cprint("   ",None,"on_red",end='')
-  if g3_occupation==None:
-    cprint("   ","white",None,end='')
-  elif g3_occupation==1:
-    cprint(" X ","white",None,end='')
-  elif g3_occupation==2:
-    cprint(" O ","white",None,end='')
-  cprint("   ",None,"on_red",end='')
-  cprint("   ",None,"on_white")
-  cprint("   ",None,"on_white",end='')
-  cprint("   ",None,"on_red",end='')
-  if b2_occupation==None:
-    cprint("   ","white",None,end='')
-  elif b2_occupation==1:
-    cprint(" X ","white",None,end='')
-  elif b2_occupation==2:
-    cprint(" O ","white",None,end='')
-  cprint("   ",None,"on_red",end='')
-  if d2_occupation==None:
-    cprint("   ","white",None,end='')
-  elif d2_occupation==1:
-    cprint(" X ","white",None,end='')
-  elif d2_occupation==2:
-    cprint(" O ","white",None,end='')
-  cprint("   ",None,"on_red",end='')
-  if f2_occupation==None:
-    cprint("   ","white",None,end='')
-  elif f2_occupation==1:
-    cprint(" X ","white",None,end='')
-  elif f2_occupation==2:
-    cprint(" O ","white",None,end='')
-  cprint("   ",None,"on_red",end='')
-  if h2_occupation==None:
-    cprint("   ","white",None,end='')
-  elif h2_occupation==1:
-    cprint(" X ","white",None,end='')
-  elif h2_occupation==2:
-    cprint(" O ","white",None,end='')
-  cprint("   ",None,"on_white")
-  cprint("   ",None,"on_white",end='')
-  if a1_occupation==None:
-    cprint("   ","white",None,end='')
-  elif a1_occupation==1:
-    cprint(" X ","white",None,end='')
-  elif a1_occupation==2:
-    cprint(" O ","white",None,end='')
-  cprint("   ",None,"on_red",end='')
-  if c1_occupation==None:
-    cprint("   ","white",None,end='')
-  elif c1_occupation==1:
-    cprint(" X ","white",None,end='')
-  elif c1_occupation==2:
-    cprint(" O ","white",None,end='')
-  cprint("   ",None,"on_red",end='')
-  if e1_occupation==None:
-    cprint("   ","white",None,end='')
-  elif e1_occupation==1:
-    cprint(" X ","white",None,end='')
-  elif e1_occupation==2:
-    cprint(" O ","white",None,end='')
-  cprint("   ",None,"on_red",end='')
-  if g1_occupation==None:
-    cprint("   ","white",None,end='')
-  elif g1_occupation==1:
-    cprint(" X ","white",None,end='')
-  elif g1_occupation==2:
-    cprint(" O ","white",None,end='')
-  cprint("   ",None,"on_red",end='')
-  cprint("   ",None,"on_white")
-  for i in range(0,9):
-    cprint("   ",None,"on_white",end='')
-    if i==8:
-      cprint("   ",None,"on_white")
+  cprint("   "*10,"grey","on_white")
+  for n in range(0,8):
+    cprint(" "+array_123[-n-1]+" ","grey","on_white",end='')
+    for i in range(0,8):
+      if eval(array_abc[i]+array_123[-n-1])=="R":
+        cprint("   ",None,"on_red",end='')
+      elif eval(array_abc[i]+array_123[-n-1])=="B":
+        cprint("   ",None,None,end='')
+      else:
+        cprint(" "+eval(array_abc[i]+array_123[-n-1])+" ",None,None,end='')
+    cprint("   ","grey","on_white",end="\n")
+  cprint("   ","grey","on_white",end='')
+  for i in range(0,8):
+    cprint(" "+array_abc[i].upper()+" ","grey","on_white",end='')
+  cprint("   ","grey","on_white",end="\n")
+
+while True:
+  try:
+    clear()
+    print_board()
+    print(message)
+    piece_select=input()
+    if piece_select.lower() in board:
+      if eval(piece_select.lower())=="X":
+        for i in range(1,8):
+          temp_str=piece_select.split(str(i))
+          if len(temp_str)==2:
+            piece_select_abc=temp_str[0]
+            break
+        for n in range(1,8):
+          temp_str=piece_select.split(str(array_abc[n-1]))
+          if len(temp_str)==2:
+            piece_select_123=temp_str[1]
+            break
+        adjacent_squares_LU=array_abc[array_abc.index(piece_select_abc)-1]+array_123[array_123.index(piece_select_123)+1]
+        adjacent_squares_LD=array_abc[array_abc.index(piece_select_abc)-1]+array_123[array_123.index(piece_select_123)-1]
+        adjacent_squares_RU=array_abc[array_abc.index(piece_select_abc)+1]+array_123[array_123.index(piece_select_123)+1]
+        adjacent_squares_RD=array_abc[array_abc.index(piece_select_abc)+1]+array_123[array_123.index(piece_select_123)-1]
+        no_L=False
+        no_R=False
+        no_D=False
+        no_U=False
+
+        if piece_select_abc=="a":
+          no_L=True
+        if piece_select_abc=="h":
+          no_R=True
+        if piece_select_123=="1":
+          no_D=True
+        if piece_select_123=="8":
+          no_U=True
+
+        if no_L==False and no_U==False:
+          adjacent_squares.append(adjacent_squares_LU)
+        if no_L==False and no_D==False:
+          adjacent_squares.append(adjacent_squares_LD)
+        if no_R==False and no_U==False:
+          adjacent_squares.append(adjacent_squares_RU)
+        if no_R==False and no_D==False:
+          adjacent_squares.append(adjacent_squares_RD)
+
+        for i in range(0,len(adjacent_squares)):
+          if eval(adjacent_squares[i])=="B":
+            adjacent_squares_open.append(adjacent_squares[i])
+
+        if len(adjacent_squares_open)==0:
+          message="There are no open spaces for that piece to move to."
+        else:
+          message="Piece selected is "+piece_select.upper()
+          break
+      elif eval(piece_select.lower())=="O":
+        message="That piece does not belong to you."
+      else:
+        message="There is no piece on that position."
+    else:
+      message="That is not a position on the board (Use A1, B2, etc.)"
+  except:
+    pass
+
+
+while True:
+  try:
+    clear()
+    print_board()
+    print(message)
+    piece_move=input()
+    if piece_move.lower() in board:
+      if eval(piece_move.lower())=="B":
+        message="Moving piece to "+piece_move.upper()
+        break
+      elif eval(piece_move.lower())=="R":
+        message="You cant move pieces onto red squares."
+      elif eval(piece_move.lower())=="X" or eval(piece_move.lower())=="O":
+        message="You can only move pieces onto open squares."
+    else:
+      message="That is not a position on the board (Use A1, B2, etc.)"
+  except:
+    pass
 
