@@ -1,3 +1,5 @@
+#checkers :)
+#im terrible at optimization
 
 import time
 import random
@@ -26,6 +28,7 @@ def clear():
 #  ________________________
 #  A  B  C  D  E  F  G  H
 
+playercount=3
 finished=0
 P1_lose=False
 P2_lose=False
@@ -35,10 +38,10 @@ pieces_player2=[["O"],["𝕆"]] #double struck O
 pieces_king=[["𝕏"],["𝕆"]]
 piece_selection=''
 piece_moveto=''
-adjacent_squares=['','','','']
-adjacent_squares_open=['','','','']
-jumping_squares=['','','','']
-jumping_squares_open=['','','','']
+squares_adjacent=['','','','']
+squares_adjacent_open=['','','','']
+pieces_jumpable=['','','','']
+pieces_jumpable_open=['','','','']
 a="1"
 b="2"
 c="3"
@@ -89,189 +92,6 @@ def print_help():
   print("Select where you want that piece to move")
   print("Hint: Use A1, B2, etc.")
 
-print_help_playercount()
-print_board()
-player_count=input()
-while player_count not in ["1","2"]:
-  clear()
-  print_help_playercount()
-  print_board()
-  player_count=input()
-player_count=eval(player_count)
-
-def player1_turn():
-  global player_turn
-  global piece_selection
-  if player_turn==1:
-    while True:
-      try:
-        clear()
-        print_help()
-        print_board()
-        print("It is Player 1's turn")
-        piece_selection=input()
-        while piece_selection=="quit()":
-          print(this)
-        check_adjacent_squares()
-        if len(adjacent_squares_open)==0 and len(jumping_squares_open)==0:
-          print(this)
-        while eval(piece_selection)[0]!="X" and eval(piece_selection)[0]!="𝕏":
-          clear()
-          print_help()
-          print_board()
-          print("It is Player 1's turn")
-          piece_selection=input()
-          while piece_selection=="quit()":
-            print(this)
-        break
-      except:
-        clear()
-        print_help()
-        print_board()
-        print("It is Player 1's turn")
-    while True:
-      try:
-        piece_moveto=input()
-        if piece_moveto=="open":
-          print(adjacent_squares_open)
-          print(jumping_squares_open)
-          temp_var=input()
-          del temp_var
-          print(this)
-        while piece_moveto=="quit()":
-            print(this)
-        if (piece_moveto not in adjacent_squares_open) and (piece_moveto not in jumping_squares_open):
-          print(this)
-        while piece_moveto=="quit()" or eval(piece_moveto)[0]!="B":
-          clear()
-          print_help()
-          print_board()
-          print("It is Player 1's turn")
-          print(piece_selection)
-          piece_moveto=input()
-          if piece_moveto=="open":
-            print(adjacent_squares_open)
-            print(jumping_squares_open)
-            temp_var=input()
-            del temp_var
-            print(this)
-        player_turn=2
-        break
-      except:
-        clear()
-        print_help()
-        print_board()
-        print("It is Player 1's turn")
-        print(piece_selection)
-  
-  if eval(board[board.index(piece_selection)])[0]=="X":
-    eval(board[board.index(piece_moveto)])[0]="X"
-  elif eval(board[board.index(piece_selection)])[0]=="𝕏":
-    eval(board[board.index(piece_moveto)])[0]="𝕏"
-  else:
-    print("That wasnt supposed to happen :/")
-    wait(100)
-    #it really wasnt :/
-  eval(board[board.index(piece_selection)])[0]="B"
-  if piece_moveto in jumping_squares_open:
-    for i in range(0,len(jumping_squares_open)):
-      if piece_moveto in jumping_squares_open[i]:
-        eval(jumping_squares[i])[0]="B"
-  check_king()
-  clear()
-  print_board()
-
-def player2_turn():
-  global player_turn
-  global piece_selection
-  if player_turn==2:
-    while True:
-      try:
-        clear()
-        print_help()
-        print_board()
-        print("It is Player 2's turn")
-        piece_selection=input()
-        while piece_selection=="quit()":
-          print(this)
-        check_adjacent_squares()
-        if len(adjacent_squares_open)==0 and len(jumping_squares_open)==0:
-          print(this)
-        while eval(piece_selection)[0]!="O" and eval(piece_selection)[0]!="𝕆":
-          clear()
-          print_help()
-          print_board()
-          print("It is Player 2's turn")
-          piece_selection=input()
-          while piece_selection=="quit()":
-            print(this)
-        break
-      except:
-        clear()
-        print_help()
-        print_board()
-        print("It is Player 2's turn")
-    while True:
-      try:
-        piece_moveto=input()
-        if piece_moveto=="open":
-          print(adjacent_squares_open)
-          print(jumping_squares_open)
-          temp_var=input()
-          del temp_var
-          print(this)
-        while piece_moveto=="quit()":
-            print(this)
-        if piece_moveto=="print(jumping_squares)":
-          print(jumping_squares)
-          temp_var=input()
-          del temp_var
-          print(this)
-        if piece_moveto=="print(jumping_squares_open)":
-          print(jumping_squares_open)
-          temp_var=input()
-          del temp_var
-          print(this)
-        if (piece_moveto not in adjacent_squares_open) and (piece_moveto not in jumping_squares_open):
-          print(this)
-        while piece_moveto=="quit()" or eval(piece_moveto)[0]!="B":
-          clear()
-          print_help()
-          print_board()
-          print("It is Player 2's turn")
-          print(piece_selection)
-          piece_moveto=input()
-          if piece_moveto=="open":
-            print(adjacent_squares_open)
-            print(jumping_squares_open)
-            temp_var=input()
-            del temp_var
-            print(this)
-        player_turn=1
-        break
-      except:
-        clear()
-        print_help()
-        print_board()
-        print("It is Player 2's turn")
-        print(piece_selection)
-  
-  if eval(board[board.index(piece_selection)])[0]=="O":
-    eval(board[board.index(piece_moveto)])[0]="O"
-  elif eval(board[board.index(piece_selection)])[0]=="𝕆":
-    eval(board[board.index(piece_moveto)])[0]="𝕆"
-  else:
-    print("That wasnt supposed to happen :/")
-    wait(100)
-    #it really wasnt :/
-  eval(board[board.index(piece_selection)])[0]="B"
-  if piece_moveto in jumping_squares_open:
-    for i in range(0,len(jumping_squares_open)):
-      if piece_moveto in jumping_squares_open[i]:
-        eval(jumping_squares[i])[0]="B"
-  clear()
-  print_board()
-
 def check_finished():
   global P1_lose
   global P2_lose
@@ -310,102 +130,253 @@ def check_king():
     eval(board[60])[0]="𝕆"
   if eval(board[63])==["O"]:
     eval(board[63])[0]="𝕆"
-  
 
-def check_adjacent_squares():
+def check_squares_adjacent_open():
   global piece_selection
-  global adjacent_squares
-  global adjacent_squares_open
-  global jumping_squares
-  global jumping_squares_open
-  global pieces_king
-  adjacent_squares=['','','','']
-  adjacent_squares_open=['','','','']
-  jumping_squares=['','','','']
-  jumping_squares_open=['','','','']
+  global squares_adjacent
+  global squares_adjacent_open
+  global pieces_jumpable
+  global pieces_jumpable_open
   no_L=False
   no_R=False
   no_D=False
   no_U=False
-  if len(piece_selection.split('a'))==2:
+  if len(piece_selection.split("a"))==2:
     no_L=True
-  if len(piece_selection.split('h'))==2:
+  if len(piece_selection.split("h"))==2:
     no_R=True
-  if len(piece_selection.split('1'))==2:
+  if len(piece_selection.split("1"))==2:
     no_D=True
-  if len(piece_selection.split('8'))==2:
+  if len(piece_selection.split("8"))==2:
     no_U=True
   if no_L==False and no_U==False:
-    adjacent_squares[0]=(board[board.index(piece_selection)-9])
+    squares_adjacent[0]=board[board.index(piece_selection)-9]
   if no_R==False and no_U==False:
-    adjacent_squares[1]=(board[board.index(piece_selection)-7])
+    squares_adjacent[1]=board[board.index(piece_selection)-7]
   if no_L==False and no_D==False:
-    adjacent_squares[2]=(board[board.index(piece_selection)+7])
+    squares_adjacent[2]=board[board.index(piece_selection)+7]
   if no_R==False and no_D==False:
-    adjacent_squares[3]=(board[board.index(piece_selection)+9])
+    squares_adjacent[3]=board[board.index(piece_selection)+9]
+  for i in range(0,4):
+    if squares_adjacent[i]!='':
+      if eval(squares_adjacent[i])==["B"]:
+        squares_adjacent_open[i]=squares_adjacent[i]
+  if eval(piece_selection)==["X"]:
+    squares_adjacent_open[2]=''
+    squares_adjacent_open[3]=''
+  if eval(piece_selection)==["O"]:
+    squares_adjacent_open[0]=''
+    squares_adjacent_open[1]=''
+
+def check_pieces_jumpable_open():
+  global piece_selection
+  global squares_adjacent
+  global squares_adjacent_open
+  global pieces_jumpable
+  global pieces_jumpable_open
+  global pieces_player1
+  global pieces_player2
+  global player_turn
   if player_turn==1:
-    for i in range(0,3):
-      while adjacent_squares[i]=='':
-        if i!=3:
-          i+=1
-      if eval(adjacent_squares[i]) in pieces_player2:
-        jumping_squares[i]=adjacent_squares[i]
-      if eval(adjacent_squares[i])==["B"]:
-        adjacent_squares_open[i]=adjacent_squares[i]
-        print(adjacent_squares_open,"adjacent_squares_open")
-        wait(1.5)
-  elif player_turn==2:
-    for i in range(0,3):
-      while adjacent_squares[i]=='':
-        if i!=3:
-          i+=1
-      if eval(adjacent_squares[i]) in pieces_player1:
-        jumping_squares[i]=adjacent_squares[i]
-      if eval(adjacent_squares[i])==["B"]:
-        adjacent_squares_open[i]=adjacent_squares[i]
-        print(adjacent_squares_open,"adjacent_squares_open")
-        wait(1.5)
-  if player_turn==1:
-    if eval(piece_selection) not in pieces_king:
-      adjacent_squares_open[2]=''
-      adjacent_squares_open[3]=''
-  if player_turn==2:
-    if eval(piece_selection) not in pieces_king:
-      adjacent_squares_open[0]=''
-      adjacent_squares_open[1]=''
-  try:
-    for i in range(0,len(jumping_squares)):
-      if jumping_squares[i]==(board[board.index(piece_selection)-9]):
-        if eval(board[board.index(jumping_squares[i])-9])==["B"]:
-          jumping_squares_open[0]=(board[board.index(jumping_squares[i])-9])
-      if jumping_squares[i]==(board[board.index(piece_selection)-7]):
-        if eval(board[board.index(jumping_squares[i])-7])==["B"]:
-          jumping_squares_open[1]=(board[board.index(jumping_squares[i])-7])
-      if jumping_squares[i]==(board[board.index(piece_selection)+7]):
-        if eval(board[board.index(jumping_squares[i])+7])==["B"]:
-          jumping_squares_open[2]=(board[board.index(jumping_squares[i])+7])
-      if jumping_squares[i]==(board[board.index(piece_selection)+9]):
-        if eval(board[board.index(jumping_squares[i])+9])==["B"]:
-          jumping_squares_open[3]=(board[board.index(jumping_squares[i])+9])
-  except:
-    pass
-    #its just out of range :/
-  
+    temp_var3=2
+  else:
+    temp_var3=1
+  temp_var=0
+  while True:
+    try:
+      for i in range(temp_var,4):
+        if eval(squares_adjacent[i]) in eval("pieces_player"+str(temp_var3)):
+          pieces_jumpable[i]=squares_adjacent[i]
+      break
+    except:
+      if temp_var!=4:
+        temp_var+=1
+      else:
+        break
+  temp_var2=[-18,-14,14,18]
+  while True:
+    try:
+      for i in range(temp_var,4):
+        pieces_jumpable_open[i]=board[board.index(piece_selection)+temp_var2[i]]
+      break
+    except:
+      if temp_var!=4:
+        temp_var+=1
+      else:
+        break
+  if eval(piece_selection)==["X"]:
+    pieces_jumpable_open[2]=''
+    pieces_jumpable_open[3]=''
+  if eval(piece_selection)==["O"]:
+    pieces_jumpable_open[0]=''
+    pieces_jumpable_open[1]=''
+
+def player1_turn():
+  global piece_selection
+  global piece_moveto
+  global message
+  print(message)
+  while True:
+    try:
+      piece_selection=input().lower()
+      if piece_selection=="quit()" or piece_selection not in board:
+        message="That is not a place on the board!"
+        print(this)
+      elif eval(piece_selection) in pieces_player2:
+        message="That is not your piece!"
+        print(this)
+      elif eval(piece_selection)==["R"]:
+        message="There arent any pieces on red squares!"
+        print(this)
+      elif eval(piece_selection)==["B"]:
+        message="You dont have a piece on that square!"
+        print(this)
+      check_squares_adjacent_open()
+      check_pieces_jumpable_open()
+      if squares_adjacent_open==['','','',''] and pieces_jumpable_open==['','','','']:
+        message="There are no open squares for that piece to move to!"
+        print(this)
+      message=''
+      break
+    except:
+      clear()
+      print_help()
+      print_board()
+      print(message)
+  while True:
+    try:
+      clear()
+      print_help()
+      print_board()
+      print("Selected "+piece_selection.upper())
+      print(message)
+      piece_moveto=input().lower()
+      if piece_moveto=="quit()" or piece_moveto not in board:
+        message="That is not a place on the board!"
+        print(this)
+      elif piece_selection==piece_moveto:
+        message="You must move the piece somewhere else!"
+        print(this)
+      elif eval(piece_moveto) in pieces_player1 or eval(piece_moveto) in pieces_player2:
+        message="You cant move pieces onto other pieces!"
+        print(this)
+      elif eval(piece_moveto)==["R"]:
+        message="You can only move onto black squares!"
+        print(this)
+      elif piece_moveto not in squares_adjacent_open and piece_moveto not in pieces_jumpable_open:
+        message="You cant move that piece there!"
+        print(this)
+      message=''
+      break
+    except:
+      pass
+  if eval(piece_selection)==["𝕏"]:
+    eval(board[board.index(piece_moveto)])[0]="𝕏"
+  else:
+    eval(board[board.index(piece_moveto)])[0]="X"
+  eval(board[board.index(piece_selection)])[0]="B"
+  if piece_moveto in pieces_jumpable_open:
+    for i in range(0,4):
+      if piece_moveto==pieces_jumpable_open[i]:
+        eval(board[board.index(pieces_jumpable[i])])[0]="B"
+
+def player2_turn():
+  global piece_selection
+  global piece_moveto
+  global message
+  print(message)
+  while True:
+    try:
+      piece_selection=input().lower()
+      if piece_selection=="quit()" or piece_selection not in board:
+        message="That is not a place on the board!"
+        print(this)
+      elif eval(piece_selection) in pieces_player1:
+        message="That is not your piece!"
+        print(this)
+      elif eval(piece_selection)==["R"]:
+        message="There arent any pieces on red squares!"
+        print(this)
+      elif eval(piece_selection)==["B"]:
+        message="You dont have a piece on that square!"
+        print(this)
+      check_squares_adjacent_open()
+      check_pieces_jumpable_open()
+      if squares_adjacent_open==['','','',''] and pieces_jumpable_open==['','','','']:
+        message="There are no open squares for that piece to move to!"
+        print(this)
+      message=''
+      break
+    except:
+      clear()
+      print_help()
+      print_board()
+      print(message)
+  while True:
+    try:
+      clear()
+      print_help()
+      print_board()
+      print("Selected "+piece_selection.upper())
+      print(message)
+      piece_moveto=input().lower()
+      if piece_moveto=="quit()" or piece_moveto not in board:
+        message="That is not a place on the board!"
+        print(this)
+      elif piece_selection==piece_moveto:
+        message="You must move the piece somewhere else!"
+        print(this)
+      elif eval(piece_moveto) in pieces_player1 or eval(piece_moveto) in pieces_player2:
+        message="You cant move pieces onto other pieces!"
+        print(this)
+      elif eval(piece_moveto)==["R"]:
+        message="You can only move onto black squares!"
+        print(this)
+      elif piece_moveto not in squares_adjacent_open and piece_moveto not in pieces_jumpable_open:
+        message="You cant move that piece there!"
+        print(this)
+      message=''
+      break
+    except:
+      pass
+  if eval(piece_selection)==["𝕆"]:
+    eval(board[board.index(piece_moveto)])[0]="𝕆"
+  else:
+    eval(board[board.index(piece_moveto)])[0]="O"
+  eval(board[board.index(piece_selection)])[0]="B"
+  if piece_moveto in pieces_jumpable_open:
+    for i in range(0,4):
+      if piece_moveto==pieces_jumpable_open[i]:
+        eval(board[board.index(pieces_jumpable[i])])[0]="B"
+
+while playercount not in ["1","2"]:
+  clear()
+  print_help_playercount()
+  print_board()
+  playercount=input()
+playercount=eval(playercount)
 
 while finished==0:
   check_finished()
   if finished==1:
     break
-  player1_turn()
-  player2_turn()
+  check_king()
+  clear()
+  print_help()
+  print_board()
+  if player_turn==1:
+    message="It is player 1's turn"
+    player1_turn()
+    player_turn=2
+  elif player_turn==2:
+    message="It is player 2's turn"
+    player2_turn()
+    player_turn=1
+  clear()
+  print_help()
+  print_board()
 
 if P2_lose==True:
   print("Player 1 wins!")
 elif P1_lose==True:
   print("Player 2 wins!")
-
-
-#for some reason, some adjacent_squares checks result in not finding h squares to be open, even if they do at first. this is because of the non-king piece
-#adjacent squares check
-#removing this would mean pieces could go forward or backwards, regardless of king status
-#revision in progress :/
