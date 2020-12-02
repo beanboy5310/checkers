@@ -1,0 +1,48 @@
+#this code is able to print 2 completely separate boards at once
+#may not be in final version
+#probably will only be used while debugging
+from termcolor import *
+
+array_abc=["a","b","c","d","e","f","g","h"]
+array_123=["1","2","3","4","5","6","7","8"]
+a8=[["R"],["R"]];b8=[["O"],["X"]];c8=[["R"],["R"]];d8=[["O"],["O"]];e8=[["R"],["R"]];f8=[["O"],["O"]];g8=[["R"],["R"]];h8=[["O"],["O"]]
+a7=[["O"],["O"]];b7=[["R"],["R"]];c7=[["O"],["O"]];d7=[["R"],["R"]];e7=[["O"],["O"]];f7=[["R"],["R"]];g7=[["O"],["O"]];h7=[["R"],["R"]]
+a6=[["R"],["R"]];b6=[["O"],["O"]];c6=[["R"],["R"]];d6=[["O"],["O"]];e6=[["R"],["R"]];f6=[["O"],["O"]];g6=[["R"],["R"]];h6=[["O"],["O"]]
+a5=[["B"],["B"]];b5=[["R"],["R"]];c5=[["B"],["B"]];d5=[["R"],["R"]];e5=[["B"],["B"]];f5=[["R"],["R"]];g5=[["B"],["B"]];h5=[["R"],["R"]]
+a4=[["R"],["R"]];b4=[["B"],["B"]];c4=[["R"],["R"]];d4=[["B"],["B"]];e4=[["R"],["R"]];f4=[["B"],["B"]];g4=[["R"],["R"]];h4=[["B"],["B"]]
+a3=[["X"],["X"]];b3=[["R"],["R"]];c3=[["X"],["X"]];d3=[["R"],["R"]];e3=[["X"],["X"]];f3=[["R"],["R"]];g3=[["X"],["X"]];h3=[["R"],["R"]]
+a2=[["R"],["R"]];b2=[["X"],["X"]];c2=[["R"],["R"]];d2=[["X"],["X"]];e2=[["R"],["R"]];f2=[["X"],["X"]];g2=[["R"],["R"]];h2=[["X"],["X"]]
+a1=[["X"],["X"]];b1=[["R"],["R"]];c1=[["X"],["X"]];d1=[["R"],["R"]];e1=[["X"],["X"]];f1=[["R"],["R"]];g1=[["X"],["X"]];h1=[["R"],["R"]]
+
+board=["a8","b8","c8","d8","e8","f8","g8","h8","a7","b7","c7","d7","e7","f7","g7","h7","a6","b6","c6","d6","e6","f6","g6","h6","a5","b5","c5","d5","e5","f5","g5","h5","a4","b4","c4","d4","e4","f4","g4","h4","a3","b3","c3","d3","e3","f3","g3","h3","a2","b2","c2","d2","e2","f2","g2","h2","a1","b1","c1","d1","e1","f1","g1","h1"]
+
+def print_board():
+  cprint("   "*10,None,"on_white",end='')
+  cprint("   ",end='')
+  cprint("   "*10,None,"on_white")
+  for n in range(0,8):
+    cprint(" "+array_123[-n-1]+" ","grey","on_white",end='')
+    for i in range(0,8):
+      if eval(array_abc[i]+array_123[-n-1])[0][0]=="R":
+        cprint("   ",None,"on_red",end='')
+      elif eval(array_abc[i]+array_123[-n-1])[0][0]=="B":
+        cprint("   ",None,None,end='')
+      else:
+        cprint(" "+eval(array_abc[i]+array_123[-n-1])[0][0]+" ",None,None,end='')
+    cprint("   ",None,"on_white",end="   ")
+    cprint(" "+array_123[-n-1]+" ","grey","on_white",end='')
+    for i in range(0,8):
+      if eval(array_abc[i]+array_123[-n-1])[1][0]=="R":
+        cprint("   ",None,"on_red",end='')
+      elif eval(array_abc[i]+array_123[-n-1])[1][0]=="B":
+        cprint("   ",None,None,end='')
+      else:
+        cprint(" "+eval(array_abc[i]+array_123[-n-1])[1][0]+" ",None,None,end='')
+    cprint("   ",None,"on_white",end="\n")
+    
+  for n in range(0,2):
+    cprint("   ",None,"on_white",end='')
+    for i in range(0,8):
+      cprint(" "+array_abc[i].upper()+" ","grey","on_white",end='')
+    cprint("   ",None,"on_white",end="   ")
+  print()
