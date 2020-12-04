@@ -68,6 +68,10 @@ board_open=["a5","c5","e5","g5","b4","d4","f4","h4"]
 board_closed=["a8","c8","e8","g8","b7","d7","f7","h7","a6","c6","e6","g6","b5","d5","f5","h5","a4","c4","e4","g4","b3","d3","f3","h3","a2","c2","e2","g2","b1","d1","f1","h1"]
 board_pieces_player1=["a3","c3","e3","g3","b2","d2","f2","h2","a1","c1","e1","g1"]
 board_pieces_player2=["b8","d8","f8","h8","a7","c7","e7","g7","b6","d6","f6","h6"]
+board_column_a=["a8","a7","a6","a5","a4","a3","a2","a1"]
+board_column_h=["h8","h7","h6","h5","h4","h3","h2","h1"]
+board_row_1=["a1","b1","c1","d1","e1","f1","g1","h1"]
+board_row_8=["a8","b8","c8","d8","e8","f8","g8","h8"]
 
 def func_print_board():
   cprint("   "*10,"grey","on_white")
@@ -158,13 +162,13 @@ def func_check_squares_adjacent_open():
   no_R=False
   no_U=False
   no_D=False
-  if len(var_piece_selection.split("a"))==2:
+  if var_piece_selection in board_column_a:
     no_L=True
-  if len(var_piece_selection.split("h"))==2:
+  if var_piece_selection in board_column_h:
     no_R=True
-  if len(var_piece_selection.split("8"))==2:
+  if var_piece_selection in board_row_8:
     no_U=True
-  if len(var_piece_selection.split("1"))==2:
+  if var_piece_selection in board_row_1:
     no_D=True
   if no_L==False and no_U==False:
     list_squares_adjacent[0]=board_all[board_all.index(var_piece_selection)-9]
@@ -177,22 +181,35 @@ def func_check_squares_adjacent_open():
   for i in range(0,4):
     if list_squares_adjacent[i] in board_open:
       list_squares_adjacent_open[i]=list_squares_adjacent[i]
+  if eval(var_piece_selection) not in pieces_king:
+    if var_player_turn==1:
+      list_squares_adjacent_open[2]=''
+      list_squares_adjacent_open[3]=''
+    else:
+      list_squares_adjacent_open[0]=''
+      list_squares_adjacent_open[1]=''
 
 def func_check_squares_jumpable_open():
-  global var_piece_selection
-  global list_squares_adjacent
-  global list_squares_adjacent_open
   global list_squares_jumpable
   global list_squares_jumpable_open
-  global pieces_player1
-  global pieces_player2
-  global var_player_turn
-  global var_player_turn_not
   list_squares_jumpable=['','','','']
   list_squares_jumpable_open=['','','','']
   for i in range(0,4):
     if list_squares_adjacent[i] in eval("board_pieces_player"+str(var_player_turn_not)):
       list_squares_jumpable[i]=list_squares_adjacent[i]
+  for i in range(0,4):
+    if list_squares_jumpable[i] in board_column_a:
+      list_squares_jumpable[0]=''
+      list_squares_jumpable[2]=''
+    if list_squares_jumpable[i] in board_column_h:
+      list_squares_jumpable[1]=''
+      list_squares_jumpable[3]=''
+    if list_squares_jumpable[i] in board_row_1:
+      list_squares_jumpable[2]=''
+      list_squares_jumpable[3]=''
+    if list_squares_jumpable[i] in board_row_8:
+      list_squares_jumpable[0]=''
+      list_squares_jumpable[1]=''
   temp_var=[-9,-7,7,9]
   for i in range(0,4):
     if list_squares_jumpable[i]!='':
@@ -209,6 +226,8 @@ def func_player_turn():
       func_print_board()
       print(str_message)
       var_piece_selection=input().lower()
+      if var_piece_selection=="q":
+        break
       if var_piece_selection not in board_all:
         str_message="That is not a place on the board!"
         print(this)
@@ -238,6 +257,8 @@ def func_player_turn():
       print(str_message)
       print("Selected "+var_piece_selection.upper())
       var_piece_moveto=input().lower()
+      if var_piece_selection=="q":
+        break
       if var_piece_moveto=="open":
         print(list_squares_adjacent_open)
         print(list_squares_jumpable_open)
@@ -270,7 +291,36 @@ def func_player_turn():
   func_check_capture()
 
 def func_bot_turn():
-  pass
+  global var_piece_selection
+  global var_piece_moveto
+  while True:
+    try:
+      var_piece_selection=random.choice(board_pieces_player2)
+      func_check_squares_adjacent_open()
+      func_check_squares_jumpable_open()
+      if list_squares_adjacent_open==['','','',''] and list_squares_jumpable_open==['','','','']:
+        print(this)
+      else:
+        print(var_piece_selection)
+        break
+    except:
+      pass
+  list_bot_moves=[]
+  for i in range(0,4):
+    list_bot_moves.append(list_squares_adjacent_open[i])
+    list_bot_moves.append(list_squares_jumpable_open[i])
+  while '' in list_bot_moves:
+    list_bot_moves.remove('')
+  var_piece_moveto=random.choice(list_bot_moves)
+  print(var_piece_moveto)
+  wait(0.5)
+  eval(var_piece_selection)[0]="B"
+  eval(var_piece_moveto)[0]=eval("pieces_player"+str(var_player_turn))[0][0]
+  board_open.append(var_piece_selection)
+  board_open.remove(var_piece_moveto)
+  eval("board_pieces_player"+str(var_player_turn)).append(var_piece_moveto)
+  eval("board_pieces_player"+str(var_player_turn)).remove(var_piece_selection)
+  func_check_capture()
 
 while var_player_count not in ["1","2"]:
   clear()
