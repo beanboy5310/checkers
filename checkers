@@ -28,13 +28,13 @@ def clear():
 #  ________________________
 #  A  B  C  D  E  F  G  H
 
+var_bot_difficulty=0
 var_player_count=3
 var_finished=False
 var_P1_lose=False
 var_P2_lose=False
 var_player_turn=1
 var_player_turn_not=2
-var_player_turn_swap=1
 pieces_player1=[["X"],["𝕏"]] #double struck X
 pieces_player2=[["O"],["𝕆"]] #double struck O
 pieces_king=[["𝕏"],["𝕆"]]
@@ -101,6 +101,12 @@ def func_print_help():
   print("Select the piece you want to move")
   print("Select where you want that piece to move")
   print("Hint: Use A1, B2, etc.")
+
+def func_print_help_difficulty():
+  print("Choose the difficulty of the computer")
+  print("1 for Easy")
+  print("2 for Medium")
+  print("3 for Hard")
 
 def func_check_finished():
   global var_P1_lose
@@ -214,6 +220,9 @@ def func_check_squares_jumpable_open():
   for i in range(0,4):
     if list_squares_jumpable[i]!='':
       list_squares_jumpable_open[i]=board_all[board_all.index(list_squares_jumpable[i])+temp_var[i]]
+  for i in range(0,4):
+    if list_squares_jumpable_open[i] not in board_open:
+      list_squares_jumpable_open[i]=''
 
 def func_player_turn():
   global var_piece_selection
@@ -225,8 +234,9 @@ def func_player_turn():
       func_print_help()
       func_print_board()
       print(str_message)
+      print("The computer moved piece "+str(var_piece_selection).upper()+" to "+str(var_piece_moveto).upper())
       var_piece_selection=input().lower()
-      if var_piece_selection=="q":
+      if var_piece_selection=="quit()":
         break
       if var_piece_selection not in board_all:
         str_message="That is not a place on the board!"
@@ -257,7 +267,7 @@ def func_player_turn():
       print(str_message)
       print("Selected "+var_piece_selection.upper())
       var_piece_moveto=input().lower()
-      if var_piece_selection=="q":
+      if var_piece_selection=="quit()":
         break
       if var_piece_moveto=="open":
         print(list_squares_adjacent_open)
@@ -282,15 +292,19 @@ def func_player_turn():
         break
     except:
       pass
+  if eval(var_piece_selection) in pieces_king:
+    eval(var_piece_moveto)[0]=eval("pieces_player"+str(var_player_turn))[1][0]
+  else:
+    eval(var_piece_moveto)[0]=eval("pieces_player"+str(var_player_turn))[0][0]
   eval(var_piece_selection)[0]="B"
-  eval(var_piece_moveto)[0]=eval("pieces_player"+str(var_player_turn))[0][0]
   board_open.append(var_piece_selection)
   board_open.remove(var_piece_moveto)
   eval("board_pieces_player"+str(var_player_turn)).append(var_piece_moveto)
   eval("board_pieces_player"+str(var_player_turn)).remove(var_piece_selection)
   func_check_capture()
 
-def func_bot_turn():
+def func_bot_turn_difficulty_easy():
+  #This difficulty will choose random pieces to move to random legal positions
   global var_piece_selection
   global var_piece_moveto
   while True:
@@ -301,7 +315,6 @@ def func_bot_turn():
       if list_squares_adjacent_open==['','','',''] and list_squares_jumpable_open==['','','','']:
         print(this)
       else:
-        print(var_piece_selection)
         break
     except:
       pass
@@ -312,14 +325,66 @@ def func_bot_turn():
   while '' in list_bot_moves:
     list_bot_moves.remove('')
   var_piece_moveto=random.choice(list_bot_moves)
-  print(var_piece_moveto)
-  wait(0.5)
+  if eval(var_piece_selection) in pieces_king:
+    eval(var_piece_moveto)[0]=pieces_player2[1][0]
+  else:
+    eval(var_piece_moveto)[0]=pieces_player2[0][0]
   eval(var_piece_selection)[0]="B"
-  eval(var_piece_moveto)[0]=eval("pieces_player"+str(var_player_turn))[0][0]
   board_open.append(var_piece_selection)
   board_open.remove(var_piece_moveto)
-  eval("board_pieces_player"+str(var_player_turn)).append(var_piece_moveto)
-  eval("board_pieces_player"+str(var_player_turn)).remove(var_piece_selection)
+  board_pieces_player2.append(var_piece_moveto)
+  board_pieces_player2.remove(var_piece_selection)
+  func_check_capture()
+
+def func_bot_turn_difficulty_medium():
+  #This difficulty will be aggressive and choose to always jump when presented the opportunity
+  global var_piece_selection
+  global var_piece_moveto
+  list_bot_pieces_eval=board_pieces_player2.copy()
+  list_bot_moves=[]
+  while True:
+    try:
+      var_piece_selection=random.choice(list_bot_pieces_eval)
+      func_check_squares_adjacent_open()
+      func_check_squares_jumpable_open()
+      if list_squares_jumpable_open==['','','','']:
+        list_bot_pieces_eval.remove(var_piece_selection)
+        if len(list_bot_pieces_eval)==0:
+          while True:
+            try:
+              var_piece_selection=random.choice(board_pieces_player2)
+              func_check_squares_adjacent_open()
+              func_check_squares_jumpable_open()
+              if list_squares_adjacent_open==['','','','']:
+                print(this)
+              else:
+                for i in range(0,4):
+                  list_bot_moves.append(list_squares_adjacent_open[i])
+                break
+            except:
+              pass
+          break
+        else:
+          print(this)
+      else:
+        for i in range(0,4):
+          list_bot_moves.append(list_squares_jumpable_open[i])
+        break
+    except:
+      pass
+  
+  while '' in list_bot_moves:
+    list_bot_moves.remove('')
+  var_piece_moveto=random.choice(list_bot_moves)
+  if eval(var_piece_selection) in pieces_king:
+    eval(var_piece_moveto)[0]=pieces_player2[1][0]
+  else:
+    eval(var_piece_moveto)[0]=pieces_player2[0][0]
+  eval(var_piece_selection)[0]="B"
+  board_open.append(var_piece_selection)
+  board_open.remove(var_piece_moveto)
+  board_pieces_player2.append(var_piece_moveto)
+  board_pieces_player2.remove(var_piece_selection)
   func_check_capture()
 
 while var_player_count not in ["1","2"]:
@@ -329,8 +394,16 @@ while var_player_count not in ["1","2"]:
   var_player_count=input()
 var_player_count=eval(var_player_count)
 
+if var_player_count==1:
+  while var_bot_difficulty not in ["1","2","3","4"]:
+    clear()
+    func_print_help_difficulty()
+    func_print_board()
+    var_bot_difficulty=input()
+  var_bot_difficulty=eval(var_bot_difficulty)
+
 while var_finished==False:
-  func_check_finished
+  func_check_finished()
   if var_finished==True:
     break
   func_check_king()
@@ -346,13 +419,22 @@ while var_finished==False:
       func_player_turn()
     else:
       str_message="Its the computer's turn"
-      func_bot_turn()
+      if var_bot_difficulty==1:
+        func_bot_turn_difficulty_easy()
+      elif var_bot_difficulty==2:
+        func_bot_turn_difficulty_medium()
+      elif var_bot_difficulty==3:
+        func_bot_turn_difficulty_hard()
   if var_player_turn==1:
     var_player_turn=2
     var_player_turn_not=1
   elif var_player_turn==2:
     var_player_turn=1
     var_player_turn_not=2
+
+clear()
+func_print_help()
+func_print_board()
 
 if var_P2_lose==True:
   print("Player 1 wins!")
