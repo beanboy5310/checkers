@@ -1,5 +1,6 @@
 #checkers :)
 #im terrible at optimization
+#note: this version of the code uses old notation and only supports bot difficulties "easy" and "medium". There is no double jump feature.
 
 import time
 import random
