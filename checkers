@@ -1,8 +1,6 @@
 #checkers :)
 #im terrible at optimization
 
-#todo: sort global variables by type and then alphabetically
-
 import time
 import random
 import os
@@ -18,27 +16,27 @@ def clear():
     c=os.system("clear")
   del c
 
-var_bot_difficulty=0
-var_player_count=3
+list_123=["1","2","3","4","5","6","7","8"]
+list_abc=["a","b","c","d","e","f","g","h"]
+list_pieces_king=           [["𝕏"],["𝕆"]]
+list_pieces_player1=        [["X"],["𝕏"]]
+list_pieces_player2=        [["O"],["𝕆"]]
+list_squares_adjacent=      ['','','','']
+list_squares_adjacent_open= ['','','','']
+list_squares_jumpable=      ['','','','']
+list_squares_jumpable_open= ['','','','']
 var_finished=False
 var_P1_lose=False
 var_P2_lose=False
-var_player_turn=1
-var_player_turn_not=2
-var_skip=0
-list_pieces_player1=[["X"],["𝕏"]] #double struck X
-list_pieces_player2=[["O"],["𝕆"]] #double struck O
-list_pieces_king=[["𝕏"],["𝕆"]]
 var_piece_selection=''
 var_piece_selection_bot=''
 var_piece_moveto=''
 var_piece_moveto_bot=''
-list_squares_adjacent=['','','','']
-list_squares_adjacent_open=['','','','']
-list_squares_jumpable=['','','','']
-list_squares_jumpable_open=['','','','']
-list_abc=["a","b","c","d","e","f","g","h"]
-list_123=["1","2","3","4","5","6","7","8"]
+var_player_count=0
+var_bot_difficulty=0
+var_player_turn=1
+var_player_turn_not=2
+var_skip=0
 a8=["R"];b8=["B"];c8=["R"];d8=["B"];e8=["R"];f8=["O"];g8=["R"];h8=["O"]
 a7=["B"];b7=["R"];c7=["B"];d7=["R"];e7=["B"];f7=["R"];g7=["X"];h7=["R"]
 a6=["R"];b6=["B"];c6=["R"];d6=["B"];e6=["R"];f6=["B"];g6=["R"];h6=["B"]
@@ -49,10 +47,10 @@ a2=["R"];b2=["B"];c2=["R"];d2=["B"];e2=["R"];f2=["B"];g2=["R"];h2=["B"]
 a1=["B"];b1=["R"];c1=["B"];d1=["R"];e1=["B"];f1=["R"];g1=["B"];h1=["R"]
 
 board_all=["a8","b8","c8","d8","e8","f8","g8","h8","a7","b7","c7","d7","e7","f7","g7","h7","a6","b6","c6","d6","e6","f6","g6","h6","a5","b5","c5","d5","e5","f5","g5","h5","a4","b4","c4","d4","e4","f4","g4","h4","a3","b3","c3","d3","e3","f3","g3","h3","a2","b2","c2","d2","e2","f2","g2","h2","a1","b1","c1","d1","e1","f1","g1","h1"]
-board_closed=[]
-board_open=[]
-board_pieces_player1=[]
-board_pieces_player2=[]
+board_closed=         []
+board_open=           []
+board_pieces_player1= []
+board_pieces_player2= []
 for i in range(0,len(board_all)):
   if eval(board_all[i])==["R"]:
     board_closed.append(board_all[i])
@@ -62,10 +60,10 @@ for i in range(0,len(board_all)):
     board_pieces_player1.append(board_all[i])
   elif eval(board_all[i]) in list_pieces_player2:
     board_pieces_player2.append(board_all[i])
-board_column_a=["a8","a7","a6","a5","a4","a3","a2","a1"]
-board_column_h=["h8","h7","h6","h5","h4","h3","h2","h1"]
-board_row_1=["a1","b1","c1","d1","e1","f1","g1","h1"]
-board_row_8=["a8","b8","c8","d8","e8","f8","g8","h8"]
+board_column_a= ["a8","a7","a6","a5","a4","a3","a2","a1"]
+board_column_h= ["h8","h7","h6","h5","h4","h3","h2","h1"]
+board_row_1=    ["a1","b1","c1","d1","e1","f1","g1","h1"]
+board_row_8=    ["a8","b8","c8","d8","e8","f8","g8","h8"]
 
 def func_print_board():
   cprint("   "*10,"grey","on_white")
@@ -430,4 +428,3 @@ if var_P2_lose==True:
   print("Player 1 wins!")
 elif var_P1_lose==True:
   print("Player 2 wins!")
-
