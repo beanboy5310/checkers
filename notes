@@ -1,0 +1,158 @@
+#key:                                                               |
+#                                                                   |
+#   -comments                                                       |
+#                                                                   |
+#      -errors                                                      |
+#        -problems with the code that either cause incorrect        |
+#        operations or a complete malfunction of the program        |
+#        -errors should be fixed before any other changes are made  |
+#        -e.g. forgetting to put except in a try/except: statement  |
+#                                                                   |
+#      -unimportant issues                                          |
+#        -problems with the code that are nonessential to the       |
+#        operations of the program, but are still incorrect         |
+#        nonetheless                                                |
+#        -it would greatly improve writing speed to fix unimportant |
+#        issues, but doing so is not necessary                      |
+#        -e.g. incorrect debug text                                 |
+#                                                                   |
+#      -todo                                                        |
+#        -things to do in future sessions                           |
+#        -e.g. fix [unimportant issue] and change name of variable x|
+#        to variable y                                              |
+#                                                                   |
+#      -fixed                                                       |
+#        -errors or unimportant issues that have been resolved      |
+#        -e.g. fixed error with player2 being unable to win due to  |
+#        func_check_finished being poorly written                   |
+#                                                                   |
+#   -vocabulary                                                     |
+#                                                                   |
+#     -tile, square (n. place)                                      |
+#       -a position on the board                                    |
+#       -has a row attribute and a column attribute based on its    |
+#        position                                                   |
+#       -denoted with either number notation or with letter/number  |
+#        notation                                                   |
+#         -e.g. the leftmost black square on the topmost row would  |
+#               be denoted as "1" or "B8"                           |
+#         -this program uses letter/number notation                 |
+#                                                                   |
+#     -piece (n. thing)                                             |
+#       -a controllable object                                      |
+#       -located on a square                                        |
+#       -both players have their own pieces                         |
+#         -players can only control their own pieces                |
+#                                                                   |
+#     -player (n. person)                                           |
+#       -a participant in the game                                  |
+#       -has controllable pieces on the board                       |
+#                                                                   |
+#     -bot, computer (n. person)                                    |
+#       -a non-human particpant in the game                         |
+#       -treated the same as a player                               |
+#       -functions the same as a player in all aspects              |
+#                                                                   |
+#     -adjacent (adj. for square and piece)                         |
+#       -when 2 squares are touching each other and are in ordinal  |
+#        directions of each other                                   |
+#                                                                   |
+#     -jumpable (adj. for adjacent square and adjacent piece)       |
+#       -when there is an opposing player's piece on an adjacent    |
+#        square                                                     |
+#                                                                   |
+#     -open (adj. for square)                                       |
+#       -when there is no piece on the square and the square is not |
+#        closed                                                     |
+#                                                                   |
+#     -closed (adj. for square)                                     |
+#       -a square that is not able to have a piece on it            |
+#                                                                   |
+#     -board (n.)                                                   |
+#       -the space in which all tiles exist                         |
+#       -all pieces exist in the board                              |
+#       -the board has sections refered to as "rows" and "columns"  |
+#                                                                   |
+#     -row (n.)                                                     |
+#       -a section of the board composed of all squares located     |
+#        horizontally of each other                                 |
+#       -multiple squares exist in all rows                         |
+#       -multiple rows exist in the board                           |
+#       -referred to by their number                                |
+#         -e.g. in letter/number notation, all squares in row 3 are |
+#               as follows: A3, B3, C3, D3, E3, F3, G3, H3          |
+#                                                                   |
+#     -column (n.)                                                  |
+#       -a section of the board composed of all squares located     |
+#        vertically of each other                                   |
+#       -multiple squares exist in all columns                      |
+#       -multiple columns exist in the board                        |
+#       -referred to by their letter                                |
+#         -e.g. in letter/number notation, all squares in column B  |
+#               are as follows: B8, B7, B6, B5, B4, B3, B2, B1      |
+#                                                                   |
+#     -var (within this program)                                    |
+#       -all user defined global variables in this program will     |
+#        begin with "var_"                                          |
+#                                                                   |
+#     -list (within this program)                                   |
+#       -all user defined global lists in this program will begin   |
+#        with "list_"                                               |
+#                                                                   |
+#     -func (within this program)                                   |
+#       -all user defined functions in this program will begin with |
+#        "func_"                                                    |
+#                                                                   |
+#   -rules of Checkers                                              |
+#                                                                   |
+#     -movement of pieces                                           |
+#       -when a player moves a piece that belongs to them, they can |
+#        only move that piece to an open and adjacent square        |
+#       -additionally, a piece can only move 1 square at a time, and|
+#        only toward the opposite side of the board (forward)       |
+#                                                                   |
+#     -capturing/jumping pieces                                     |
+#       -when a player's piece is adjacent to a jumpable piece, that|
+#        piece has the ability to "jump"                            |
+#       -when a piece jumps, it moves 2 squares in the direction of |
+#        the jumpable piece and removes the jumpable piece from the |
+#        board                                                      |
+#                                                                   |
+#     -kinging                                                      |
+#       -when a player's piece reaches the opposite side of the     |
+#        board, it becomes a "king" piece                           |
+#       -king pieces are allowed to move both forward and backward  |
+#                                                                   |
+#     -ending the game                                              |
+#       -the game ends when one of the players has no remaining     |
+#        pieces to move                                             |
+#       -if a player has no remaining pieces to move, they lose     |
+#                                                                   |
+
+#visual representation of the board
+#8| A8 B8 C8 D8 E8 F8 G8 H8
+#7| A7 B7 C7 D7 E7 F7 G7 H7
+#6| A6 B6 C6 D6 E6 F6 G6 H6
+#5| A5 B5 C5 D5 E5 F5 G5 H5
+#4| A4 B4 C4 D4 E4 F4 G4 H4
+#3| A3 B3 C3 D3 E3 F3 G3 H3
+#2| A2 B2 C2 D2 E2 F2 G2 H2
+#1| A1 B1 C1 D1 E1 F1 G1 H1
+#  ________________________
+#  A  B  C  D  E  F  G  H
+
+
+#func_print_board:                  prints the board using cprint. it checks all elements in board_all and decides what color background to use based on other boards the checked element is also in. if the element is in a player's board, it also prints the corresponding player's piece in that square
+#func_print_help_playercount:       prints help text for choosing the playercount
+#func_print_help_difficulty:        prints help text for how to choose the difficulty of the bot
+#func_print_help:                   prints help text for how to read and write tiles or moves to the program
+#func_check_finished:               checks to see if the game is finished, and if so, who won the game
+#func_check_king:                   checks to see if a piece needs to be kinged upon reaching the opposite side of the board
+#func_check_capture:                checks if a moving piece has captured an enemy piece. if so, calls upon func_check_skip
+#func_check_skip:                   checks if a piece can be skipped. if so, calls upon func_player_turn_moveto (or func_bot_turn_moveto if it is the bot's turn to move)
+#func_new_board:                    changes all pieces on the board according to the last play
+#func_check_squares_adjacent_open:  checks all adjacent squares and open adjacent squares of the currently selected piece
+#func_Check_squares_jumpable_open:  checks all adjacent squares for enemy pieces. if there is an adjacent square with an enemy piece, checks the square behind (the direction away from the selected piece) it. if that square is open, adds it to a list
+#func_player_turn_selection:        requests input from the user. the user must enter a piece according to the specifications of func_print_help. if the piece does not match certain criteria, another request will be made. requests will be made until input is received that fits the criteria
+#func_player_turn_moveto:           requests input from the user. the user must enter a square to move their piece to according to the rules of Checkers
+#
