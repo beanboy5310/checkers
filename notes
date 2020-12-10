@@ -142,6 +142,10 @@
 #  A  B  C  D  E  F  G  H
 
 
+
+
+
+
 #func_print_board:                  prints the board using cprint. it checks all elements in board_all and decides what color background to use based on other boards the checked element is also in. if the element is in a player's board, it also prints the corresponding player's piece in that square
 #func_print_help_playercount:       prints help text for choosing the playercount
 #func_print_help_difficulty:        prints help text for how to choose the difficulty of the bot
@@ -155,4 +159,7 @@
 #func_Check_squares_jumpable_open:  checks all adjacent squares for enemy pieces. if there is an adjacent square with an enemy piece, checks the square behind (the direction away from the selected piece) it. if that square is open, adds it to a list
 #func_player_turn_selection:        requests input from the user. the user must enter a piece according to the specifications of func_print_help. if the piece does not match certain criteria, another request will be made. requests will be made until input is received that fits the criteria
 #func_player_turn_moveto:           requests input from the user. the user must enter a square to move their piece to according to the rules of Checkers
-#
+#func_player_turn:                  combines functions func_player_turn_selection and func_player_turn_moveto, as well as a few other operations to allow for more functions of the program
+#func_bot_turn_selection:           functions similarly to func_player_turn_selection. based on the previously selected difficulty, uses an algorithm to semi-randomly select a valid piece
+#func_bot_turn_moveto:              functions similarly to func_player_turn_moveto. based on the previously selected difficulty, uses an algorithm to semi-randomly select a valid movement for the previously selected piece
+#func_bot_turn:                     functions the same as func_player_turn, with the only difference being it calls func_bot_turn_selection and func_bot_turn_moveto instead of func_player_turn_selection and func_player_turn_moveto
