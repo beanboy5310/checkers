@@ -1,3 +1,7 @@
+#if you see "print(this)" anywhere in the code, its not an error, im|
+#not trying to do "print("this")", im just trying to restart a loop.|
+#im really new to coding and have no idea how to restart a          |
+#"while true: try/except:" loop other than this method              |
 #key:                                                               |
 #                                                                   |
 #   -comments                                                       |
@@ -163,3 +167,5 @@
 #func_bot_turn_selection:           functions similarly to func_player_turn_selection. based on the previously selected difficulty, uses an algorithm to semi-randomly select a valid piece
 #func_bot_turn_moveto:              functions similarly to func_player_turn_moveto. based on the previously selected difficulty, uses an algorithm to semi-randomly select a valid movement for the previously selected piece
 #func_bot_turn:                     functions the same as func_player_turn, with the only difference being it calls func_bot_turn_selection and func_bot_turn_moveto instead of func_player_turn_selection and func_player_turn_moveto
+
+#more function definitions coming soon
