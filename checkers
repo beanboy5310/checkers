@@ -18,6 +18,7 @@ def clear():
 
 list_123=["1","2","3","4","5","6","7","8"]
 list_abc=["a","b","c","d","e","f","g","h"]
+list_bot_moves=[]
 list_pieces_king=           [["𝕏"],["𝕆"]]
 list_pieces_player1=        [["X"],["𝕏"]]
 list_pieces_player2=        [["O"],["𝕆"]]
@@ -37,14 +38,16 @@ var_bot_difficulty=0
 var_player_turn=1
 var_player_turn_not=2
 var_skip=0
-a8=["R"];b8=["B"];c8=["R"];d8=["B"];e8=["R"];f8=["O"];g8=["R"];h8=["O"]
-a7=["B"];b7=["R"];c7=["B"];d7=["R"];e7=["B"];f7=["R"];g7=["X"];h7=["R"]
-a6=["R"];b6=["B"];c6=["R"];d6=["B"];e6=["R"];f6=["B"];g6=["R"];h6=["B"]
+var_bot_jumping=0
+var_danger=0
+a8=["R"];b8=["O"];c8=["R"];d8=["O"];e8=["R"];f8=["O"];g8=["R"];h8=["O"]
+a7=["O"];b7=["R"];c7=["O"];d7=["R"];e7=["O"];f7=["R"];g7=["O"];h7=["R"]
+a6=["R"];b6=["O"];c6=["R"];d6=["O"];e6=["R"];f6=["O"];g6=["R"];h6=["O"]
 a5=["B"];b5=["R"];c5=["B"];d5=["R"];e5=["B"];f5=["R"];g5=["B"];h5=["R"]
 a4=["R"];b4=["B"];c4=["R"];d4=["B"];e4=["R"];f4=["B"];g4=["R"];h4=["B"]
-a3=["B"];b3=["R"];c3=["B"];d3=["R"];e3=["B"];f3=["R"];g3=["B"];h3=["R"]
-a2=["R"];b2=["B"];c2=["R"];d2=["B"];e2=["R"];f2=["B"];g2=["R"];h2=["B"]
-a1=["B"];b1=["R"];c1=["B"];d1=["R"];e1=["B"];f1=["R"];g1=["B"];h1=["R"]
+a3=["X"];b3=["R"];c3=["X"];d3=["R"];e3=["X"];f3=["R"];g3=["X"];h3=["R"]
+a2=["R"];b2=["X"];c2=["R"];d2=["X"];e2=["R"];f2=["X"];g2=["R"];h2=["X"]
+a1=["X"];b1=["R"];c1=["X"];d1=["R"];e1=["X"];f1=["R"];g1=["X"];h1=["R"]
 
 board_all=["a8","b8","c8","d8","e8","f8","g8","h8","a7","b7","c7","d7","e7","f7","g7","h7","a6","b6","c6","d6","e6","f6","g6","h6","a5","b5","c5","d5","e5","f5","g5","h5","a4","b4","c4","d4","e4","f4","g4","h4","a3","b3","c3","d3","e3","f3","g3","h3","a2","b2","c2","d2","e2","f2","g2","h2","a1","b1","c1","d1","e1","f1","g1","h1"]
 board_closed=         []
@@ -125,11 +128,11 @@ def func_check_capture():
   global board_open
   global var_skip
   var_skip=0
-  for i in range(0,4):
-    if var_piece_moveto==list_squares_jumpable_open[i]:
-      eval(list_squares_jumpable[i])[0]="B"
-      eval("board_pieces_player"+str(var_player_turn_not)).remove(list_squares_jumpable[i])
-      board_open.append(list_squares_jumpable[i])
+  for q in range(0,4):
+    if var_piece_moveto==list_squares_jumpable_open[q]:
+      eval(list_squares_jumpable[q])[0]="B"
+      eval("board_pieces_player"+str(var_player_turn_not)).remove(list_squares_jumpable[q])
+      board_open.append(list_squares_jumpable[q])
       var_skip=1
   if var_skip==1:
     func_check_skip()
@@ -138,8 +141,7 @@ def func_check_skip():
   global var_piece_moveto
   global var_piece_selection
   var_piece_selection=var_piece_moveto
-  func_check_squares_adjacent_open()
-  func_check_squares_jumpable_open()
+  func_check_squares_open()
   if list_squares_jumpable_open!=['','','','']:
     if var_player_count==2 or var_player_turn==1:
       func_player_turn_moveto()
@@ -149,6 +151,8 @@ def func_check_skip():
 def func_new_board():
   global var_piece_selection
   global var_piece_moveto
+  global var_piece_selection_bot
+  global var_piece_moveto_bot
   global board_open
   global board_pieces_player1
   global board_pieces_player2
@@ -238,6 +242,10 @@ def func_check_squares_jumpable_open():
       list_squares_jumpable_open[0]=''
       list_squares_jumpable_open[1]=''
 
+def func_check_squares_open():
+  func_check_squares_adjacent_open()
+  func_check_squares_jumpable_open()
+
 def func_player_turn_selection():
   global var_piece_selection
   global str_message
@@ -263,8 +271,7 @@ def func_player_turn_selection():
       elif var_piece_selection in eval("board_pieces_player"+str(var_player_turn_not)):
         str_message="That is not your piece!"
         print(this)
-      func_check_squares_adjacent_open()
-      func_check_squares_jumpable_open()
+      func_check_squares_open()
       if list_squares_adjacent_open==['','','',''] and list_squares_jumpable_open==['','','','']:
         str_message="There are no open squares for that piece to move to!"
         print(this)
@@ -327,104 +334,185 @@ def func_player_turn():
 def func_bot_turn_selection():
   global var_piece_selection
   global var_piece_selection_bot
+  global var_bot_jumping
+  list_bot_pieces=board_pieces_player2.copy()
   if var_bot_difficulty==1:
     while True:
       try:
-        var_piece_selection=random.choice(board_pieces_player2)
-        func_check_squares_adjacent_open()
-        func_check_squares_jumpable_open()
+        var_piece_selection=random.choice(list_bot_pieces)
+        func_check_squares_open()
         if list_squares_adjacent_open==['','','',''] and list_squares_jumpable_open==['','','','']:
+          list_bot_pieces.remove(var_piece_selection)
           print(this)
         else:
           break
       except:
         pass
   if var_bot_difficulty==2:
-    pass
+    while True:
+      try:
+        if len(list_bot_pieces)!=0:
+          var_piece_selection=random.choice(list_bot_pieces)
+          func_check_squares_open()
+          if list_squares_jumpable_open==['','','','']:
+            list_bot_pieces.remove(var_piece_selection)
+            print(this)
+          else:
+            break
+        else:
+          var_piece_selection=random.choice(board_pieces_player2)
+          func_check_squares_open()
+          if list_squares_adjacent_open==['','','','']:
+            print(this)
+          else:
+            break
+      except:
+        pass
   if var_bot_difficulty==3:
-    pass
+    while True:
+      try:
+        var_piece_selection=random.choice(list_bot_pieces)
+        func_check_squares_open()
+        if list_squares_jumpable!=['','','','']:
+          var_bot_jumping=1
+          break
+        elif list_squares_adjacent_open!=['','','','']:
+          var_bot_jumping=0
+          break
+        else:
+          list_bot_pieces.remove(var_piece_selection)
+          print(this)
+      except:
+        pass
   if var_bot_difficulty==4:
     pass
+    #this is supposed to be the hidden "impossible" difficulty
   var_piece_selection_bot=var_piece_selection
 
+def func_bot_find_danger():
+  global var_piece_selection
+  global var_piece_selection_bot
+  global var_danger
+  temp_var=var_piece_selection
+  var_piece_selection=var_piece_moveto
+  func_check_squares_open()
+  temp_list=[0,1,2,3]
+  for n in range(0,2):
+    if eval(list_squares_adjacent[n])==list_pieces_king[0]:
+      if list_squares_adjacent[-n-1] in list_squares_adjacent_open:
+        var_danger=1
+  for n in range(2,4):
+    if list_squares_adjacent[n] in board_pieces_player1:
+      if list_squares_adjacent[-n-1] in list_squares_adjacent_open:
+        var_danger=1
+  var_piece_selection=temp_var
+  func_check_squares_open()
+
+
 def func_bot_turn_moveto():
+  global var_piece_selection
   global var_piece_moveto
   global var_piece_moveto_bot
+  global list_bot_moves
   if var_bot_difficulty==1:
-    list_bot_moves=[]
     for i in range(0,4):
       list_bot_moves.append(list_squares_adjacent_open[i])
       list_bot_moves.append(list_squares_jumpable_open[i])
+    if var_skip==1:
+      list_bot_moves.append(var_piece_selection)
     while '' in list_bot_moves:
       list_bot_moves.remove('')
     var_piece_moveto=random.choice(list_bot_moves)
   if var_bot_difficulty==2:
-    pass
+    if list_squares_jumpable_open!=['','','','']:
+      while var_piece_moveto not in board_open:
+        var_piece_moveto=random.choice(list_squares_jumpable_open)
+    else:
+      while var_piece_moveto not in board_open:
+        var_piece_moveto=random.choice(list_squares_adjacent_open)
   if var_bot_difficulty==3:
-    pass
+    if var_bot_jumping==1:
+      list_bot_moves=list_squares_jumpable_open.copy()
+    elif var_bot_jumping==0:
+      list_bot_moves=list_squares_adjacent_open.copy()
+    while '' in list_bot_moves:
+      list_bot_moves.remove('')
+    var_piece_moveto=random.choice(list_bot_moves)
+    func_bot_find_danger()
   if var_bot_difficulty==4:
     pass
+    #this is supposed to be the hidden "impossible" difficulty
   var_piece_moveto_bot=var_piece_moveto
   func_new_board()
   func_check_capture()
 
 def func_bot_turn():
   global var_skip
+  global list_bot_moves
   var_skip=0
+  list_bot_moves=[]
   func_bot_turn_selection()
   func_bot_turn_moveto()
 
-while var_player_count not in ["1","2"]:
-  clear()
-  func_print_help_playercount()
-  func_print_board()
-  var_player_count=input()
-var_player_count=eval(var_player_count)
-
-if var_player_count==1:
-  while var_bot_difficulty not in ["1","2","3","4"]:
+def prgm_start():
+  global var_player_count
+  global var_bot_difficulty
+  global str_message
+  global var_player_turn
+  global var_player_turn_not
+  while var_player_count not in ["1","2"]:
     clear()
-    func_print_help_difficulty()
+    func_print_help_playercount()
     func_print_board()
-    var_bot_difficulty=input()
-  var_bot_difficulty=eval(var_bot_difficulty)
+    var_player_count=input()
+  var_player_count=eval(var_player_count)
 
-while var_finished==False:
-  func_check_finished()
-  if var_finished==True:
-    break
-  func_check_king()
-  if var_player_turn==1:
-    if var_player_count==2:
-      str_message="Its player 1's turn"
-    else:
-      str_message="Its your turn"
-    func_player_turn()
-  elif var_player_turn==2:
-    if var_player_count==2:
-      str_message="Its player 2's turn"
+  if var_player_count==1:
+    while var_bot_difficulty not in ["1","2","3","4"]:
+      clear()
+      func_print_help_difficulty()
+      func_print_board()
+      var_bot_difficulty=input()
+    var_bot_difficulty=eval(var_bot_difficulty)
+
+  while var_finished==False:
+    func_check_finished()
+    if var_finished==True:
+      break
+    func_check_king()
+    if var_player_turn==1:
+      if var_player_count==2:
+        str_message="Its player 1's turn"
+      else:
+        str_message="Its your turn"
       func_player_turn()
-    else:
-      str_message="Its the computer's turn"
-      if var_bot_difficulty==1:
-        func_bot_turn()
-      elif var_bot_difficulty==2:
-        func_bot_turn()
-      elif var_bot_difficulty==3:
-        func_bot_turn()
-  if var_player_turn==1:
-    var_player_turn=2
-    var_player_turn_not=1
-  elif var_player_turn==2:
-    var_player_turn=1
-    var_player_turn_not=2
+    elif var_player_turn==2:
+      if var_player_count==2:
+        str_message="Its player 2's turn"
+        func_player_turn()
+      else:
+        str_message="Its the computer's turn"
+        if var_bot_difficulty==1:
+          func_bot_turn()
+        elif var_bot_difficulty==2:
+          func_bot_turn()
+        elif var_bot_difficulty==3:
+          func_bot_turn()
+    if var_player_turn==1:
+      var_player_turn=2
+      var_player_turn_not=1
+    elif var_player_turn==2:
+      var_player_turn=1
+      var_player_turn_not=2
 
-clear()
-func_check_king()
-func_print_help()
-func_print_board()
+  clear()
+  func_check_king()
+  func_print_help()
+  func_print_board()
 
-if var_P2_lose==True:
-  print("Player 1 wins!")
-elif var_P1_lose==True:
-  print("Player 2 wins!")
+  if var_P2_lose==True:
+    print("Player 1 wins!")
+  elif var_P1_lose==True:
+    print("Player 2 wins!")
+
+prgm_start()
