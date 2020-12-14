@@ -1,5 +1,7 @@
 #checkers :)
 #im terrible at optimization
+#errors: func_bot_find_danger works but does nothing due to lack of implementation of var_danger in any other funcs
+#todo: fix var_bot_difficulty 3 moveto and selection 
 
 import time
 import random
